@@ -1,5 +1,5 @@
 import { createElement as h, useEffect, useState } from 'react';
-import { Admin } from './components/Admin.js?v=20261016-qa1';
+import { Admin } from './components/Admin.js?v=20261016-qa2';
 import { Menu } from './components/Menu.js?v=20261016-photos';
 import { CloudManager } from './components/CloudManager.js?v=20261016-photos';
 import { cloudEnabled } from './services/cloud.js?v=20261016-photos';
