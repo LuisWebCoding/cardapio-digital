@@ -1,0 +1,15 @@
+# Artefatos gerados e estado local
+dist/
+.netlify/
+.deploy/
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+qa-*.html
+.DS_Store
+Thumbs.db
+
+# Associação real do gestor ao banco: mantenha somente na cópia local
+supabase/seed.sql

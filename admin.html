@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#B83D24">
+  <meta name="description" content="Painel de gestão do restaurante">
+  <title>Painel do restaurante</title>
+  <link rel="stylesheet" href="src/styles.css?v=20261016-photos">
+  <!-- Versões fixas; módulos nativos, sem Node.js, Babel ou compilação. -->
+  <script type="importmap">
+    {"imports":{"react":"https://esm.sh/react@19.2.0","react-dom/client":"https://esm.sh/react-dom@19.2.0/client?external=react"}}
+  </script>
+  <script src="config.js?v=20261016-photos"></script>
+  <script src="cloud-config.js?v=20261016-photos"></script>
+</head>
+<body>
+  <div id="root"><p class="loading">Carregando cardápio… Se não abrir, use um servidor HTTP conforme o README.</p></div>
+  <noscript>Ative o JavaScript para visualizar o cardápio.</noscript>
+  <script type="module" src="src/admin-main.js?v=20261016-photos"></script>
+</body>
+</html>
