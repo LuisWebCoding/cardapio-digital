@@ -7,11 +7,15 @@ import { clone, newId, saveItem } from '../lib/menu.js?v=20261016-photos';
 
 function CategoryForm({ category, onSave, onCancel }) {
   const [name, setName] = useState(category?.nome || '');
+  const [error, setError] = useState('');
   return h('form', { className: 'form-stack', onSubmit: e => {
     e.preventDefault();
-    if (name.trim()) onSave({ id: category?.id || newId(), nome: name.trim(), itens: category?.itens || [] });
+    if (!name.trim()) { setError('Informe o nome da categoria.'); return; }
+    setError('');
+    onSave({ id: category?.id || newId(), nome: name.trim(), itens: category?.itens || [] });
   }},
     h(Field, { label: 'Nome da categoria', required: true, maxLength: 80, value: name, onChange: e => setName(e.target.value) }),
+    error && h('p', { role: 'alert', className: 'error' }, error),
     h('div', { className: 'form-actions' },
       h('button', { type: 'button', className: 'button secondary', onClick: onCancel }, 'Cancelar'),
       h('button', { className: 'button primary' }, 'Salvar categoria')));
@@ -22,8 +26,13 @@ export function Admin({ menu, commit, message, setMessage, publication = null })
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('');
   const [modal, setModal] = useState(null);
-  const close = () => setModal(null);
-  const persist = next => { if (commit(next)) close(); };
+  const [modalError, setModalError] = useState('');
+  const close = () => { setModal(null); setModalError(''); };
+  const persist = next => {
+    setModalError('');
+    if (commit(next)) close();
+    else setModalError('Não foi possível salvar. Confira os dados e o espaço disponível neste navegador e tente novamente.');
+  };
   const count = menu.categorias.reduce((sum, c) => sum + c.itens.length, 0);
   const products = menu.categorias.flatMap(category => category.itens.map(item => ({ item, category })))
     .filter(({ item, category }) => (!filter || filter === category.id) &&
@@ -93,15 +102,17 @@ export function Admin({ menu, commit, message, setMessage, publication = null })
       tab === 'restaurante' && h(RestaurantForm, { menu, onSave: commit }),
       h('footer', { className: 'admin-footer' }, publication ? 'Painel do restaurante • Publicação online' : 'Demonstração local • Cardápio em React')),
     modal && h(Modal, {
+      key: modal.kind + ':' + (modal.item?.id || modal.category?.id || 'novo'),
       title: modal.kind === 'product' ? (modal.item ? 'Editar produto' : 'Novo produto')
         : modal.kind === 'category' ? (modal.category ? 'Editar categoria' : 'Nova categoria')
         : 'Confirmar exclusão',
       onClose: close
     },
+      modalError && h('p', { role: 'alert', className: 'error' }, modalError),
       modal.kind === 'product' && h(ProductForm, { item: modal.item, categoryId: modal.category?.id, categories: menu.categorias, onCancel: close,
         onSave: (item, categoryId) => {
           try { persist(saveItem(menu, item, categoryId)); }
-          catch (error) { setMessage(error.message); }
+          catch (error) { setMessage(error.message); setModalError(error.message); }
         }}),
       modal.kind === 'category' && h(CategoryForm, { category: modal.category, onCancel: close, onSave: category => {
         const next = clone(menu);
