@@ -108,7 +108,10 @@ export function Admin({ menu, commit, message, setMessage, publication = null })
         : 'Confirmar exclusão',
       onClose: close
     },
-      modalError && h('p', { role: 'alert', className: 'error' }, modalError),
+      modalError && h('p', { role: 'alert', className: 'error',
+        style: { position: 'sticky', top: 0, zIndex: 2, background: '#fff3f1',
+          padding: '.8rem', border: '1px solid #f2d4cf', borderRadius: 9 }
+      }, modalError),
       modal.kind === 'product' && h(ProductForm, { item: modal.item, categoryId: modal.category?.id, categories: menu.categorias, onCancel: close,
         onSave: (item, categoryId) => {
           try { persist(saveItem(menu, item, categoryId)); }
