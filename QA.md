@@ -18,7 +18,7 @@ confirmações de entrada. Não foram utilizados e-mail, senha ou tokens do gest
 | Problema | Correção | Regressão manual |
 | --- | --- | --- |
 | Categoria com nome contendo somente espaços não salva e não explica o motivo | Mensagem de erro dentro do formulário | Nome com três espaços mostra “Informe o nome da categoria” |
-| Erro de persistência pode aparecer atrás do diálogo, fora da área acessível | Mensagem também exibida dentro do diálogo, sem fechar nem perder os campos | Persistência retornando falha simulada: diálogo continua aberto, dados preenchidos e alerta visível |
+| Erro de persistência pode aparecer atrás do diálogo, fora da área acessível | Mensagem fixa na área visível do diálogo, sem fechar nem perder os campos | Persistência retornando falha simulada: diálogo continua aberto, dados preenchidos e alerta visível mesmo com o formulário rolado até o fim |
 
 As entradas administrativas receberam uma nova versão de URL dos módulos alterados
 para evitar que o navegador reutilize a implementação anterior.
