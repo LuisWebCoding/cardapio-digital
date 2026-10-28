@@ -1,11 +1,64 @@
 # Cardápio digital em React
 
-Template white-label com cardápio público e painel do gestor em entradas independentes. Sem Node.js ou compilação para usar/hospedar; React é carregado por CDN.
+## Apresentação Gastrô Pub
+
+Apresentação pública: [Gastrô Pub](https://gastro-pub-apresentacao-luis.netlify.app/),
+publicada em projeto separado no Netlify, sem marca d'água.
+
+Abra [gastro-pub.html](gastro-pub.html) no servidor local para ver a versão preto e
+laranja com a logo, Hambúrgueres, Bebidas e Espetinhos. Os seis produtos têm preços
+ilustrativos e ficam em `clientes/gastro-pub/config.js`. Essa apresentação não
+altera o cardápio no Supabase. Detalhes em [clientes/gastro-pub/README.md](clientes/gastro-pub/README.md).
+
+## Vercel — 28/10/2026
+
+**Decisão atual:** manter o Netlify gratuito. O selo Powered by Netlify foi
+desativado nas configurações reais do projeto em 28/10/2026, com confirmação
+"The badge is not shown on this project". Não foi necessário migrar ou fazer
+um novo deploy para remover o selo. A compatibilidade Vercel abaixo é opcional.
+
+Compatibilidade preparada com `vercel.json`, Function em `/api/publish-menu` e
+Deploy Hook protegido no servidor. Veja [VERCEL.md](VERCEL.md) para ativar. O
+Hobby é restrito a uso pessoal não comercial; confira o plano antes de hospedar
+o produto vendido a restaurantes. O site real ainda não foi migrado.
+
+## Publicação independente do Supabase
+
+O consumidor lê uma versão estática do cardápio e das fotos na hospedagem. O
+Supabase é necessário para o gestor editar e publicar. O fluxo automático usa
+uma Function e Deploy Hook na Vercel ou no Netlify e exige ativação no site antes de vender.
+Leia [PUBLICACAO-ESTATICA.md](PUBLICACAO-ESTATICA.md) para configurar, testar e
+entender os limites do plano gratuito. Esta adaptação ainda não foi implantada
+no site real. A prévia local já tem uma cópia da versão atual.
+
+## Melhorias de gestão e consulta — 27/10/2026
+
+- O cliente pode buscar por nome, descrição, categoria, porção e informações alimentares, sem precisar digitar acentos.
+- Toque no nome ou na foto para abrir os detalhes e visualizar a imagem ampliada.
+- No painel, **Pausar** marca um produto como indisponível sem excluir seu cadastro; **Disponibilizar** reverte a ação. A mudança só aparece para o cliente depois de publicar.
+- **Organizar ordem** mostra setas para reordenar categorias e produtos. Produtos são ordenados dentro de sua categoria; para mudar de categoria, use Editar.
+- O painel indica **Alterações não publicadas** ou **Tudo atualizado**, com a data da versão publicada quando disponível. O botão de publicação fica desativado quando não há alterações.
+- O formulário do produto aceita **Porção** e **Informações alimentares**. Esses dados são preenchidos pelo restaurante; o sistema não deduz composição ou alergênicos.
+- **Histórico** permite carregar uma publicação anterior como rascunho, com confirmação. Isso não publica automaticamente a versão escolhida.
+- **QR Code e guia** gera o código no próprio navegador, permite baixar para impressão e explica a rotina de configuração e publicação.
+- **Esqueci minha senha** solicita um link por e-mail e permite criar uma nova senha ao retornar pelo link de recuperação.
+
+Para ativar o histórico, execute [supabase/history.sql](supabase/history.sql) no SQL Editor após `schema.sql`, no mesmo projeto configurado no site. Ele registra a versão atual e as próximas publicações, mantendo as últimas 20 versões de cada restaurante. O histórico é privado do gestor e não recupera publicações anteriores à ativação. Sem essa atualização, os demais recursos continuam funcionando; a aba Histórico informa que o serviço não está disponível.
+
+Para a recuperação de acesso, cadastre o endereço HTTPS de `admin.html` em **Supabase → Authentication → URL Configuration → Redirect URLs**, por exemplo `https://brasa-e-pao-cardapio-luis.netlify.app/admin.html`. O envio usa o serviço de e-mail configurado no projeto e deve ser testado com a caixa de entrada real do gestor. Não é necessário compartilhar senhas com o responsável pela aplicação.
+
+O QR Code deve apontar para a página do cliente, sem fragmentos ou parâmetros de acesso. No computador de desenvolvimento, preencha o endereço público HTTPS antes de gerar. Confira a leitura no celular antes de imprimir.
+
+Não foi implementado modo offline. React continua carregado pelo CDN. As cópias `vendor/react.mjs`, `vendor/react-dom-client.mjs` e `vendor/LICENSE-React.txt`, se presentes de uma preparação anterior, não são utilizadas nem copiadas para a hospedagem. Somente a biblioteca local de QR Code e sua licença são incluídas de `vendor/`.
+
+Validação desta etapa: [QA-20261027.md](QA-20261027.md).
+
+Template white-label com cardápio público e painel do gestor em entradas independentes. O navegador não exige Node.js ou compilação; React é carregado por CDN. A publicação automática executa Node.js no build do Netlify e uma Function sob demanda, sem servidor permanente para manter.
 
 ## Duas formas de usar
 
 - **Demonstração local:** cloud-config.js com ativo: false. CRUD e prévia com rascunhos locais, sem publicação. O único botão de publicação fica desativado até conectar o serviço online. Não há login neste modo, identificado como demonstração.
-- **Gestão online com Supabase:** ativo: true após configurar o projeto. Login por e-mail/senha, autorização do gestor no banco e botão Publicar cardápio. O consumidor lê os dados online sem precisar de novo deploy.
+- **Gestão online com Supabase:** ativo: true após configurar o projeto. Login por e-mail/senha, autorização do gestor no banco e botão Publicar cardápio. A publicação inicia um deploy no Netlify com JSON e imagens próprios; o consumidor não consulta o Supabase.
 
 A integração está preparada, mas o projeto Supabase real ainda precisa ser criado e configurado. Consulte [supabase/README.md](supabase/README.md) para o passo a passo e as verificações de entrega.
 
@@ -48,7 +101,7 @@ Não há projeto remoto criado nem credenciais configuradas automaticamente. Os 
 - Cadastre/edite/exclua produtos e categorias.
 - Personalize marca, preços, fotos e descrições.
 - Confira Ver prévia.
-- Em modo online, clique Publicar cardápio: o banco recebe uma versão completa do cardápio, e novos acessos do consumidor já leem essa versão. Páginas abertas consultam atualizações a cada 30 segundos enquanto visíveis e ao receber foco.
+- Em modo online, clique Publicar cardápio: depois da pré-verificação, o banco salva a versão e a hospedagem prepara os arquivos. Aguarde a confirmação de publicação no painel. Novos acessos do consumidor leem a versão entregue; páginas abertas conferem o JSON a cada 30 segundos enquanto visíveis e ao receber foco.
 - O painel possui apenas o botão Publicar cardápio para disponibilizar alterações. Rascunhos são locais; o conteúdo publicado é compartilhado.
 
 A publicação detecta conflito com outra aba para evitar sobrescrever uma edição recente. Em conflito, reabra o painel e reconcilie os dados antes de publicar. O login usa Supabase Auth; a autorização real depende das políticas SQL.

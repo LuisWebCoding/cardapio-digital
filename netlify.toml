@@ -2,7 +2,29 @@
   command = "node scripts/prepare-site.mjs"
   publish = "dist"
 
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[headers]]
+  for = "/published/menu.json"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/published/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 # Não reescrever todas as URLs para index.html: o gestor tem uma entrada própria.
+[[redirects]]
+  from = "/api/publish-menu"
+  to = "/.netlify/functions/publish-menu"
+  status = 200
+
 [[redirects]]
   from = "/admin"
   to = "/admin.html"

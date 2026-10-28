@@ -17,3 +17,9 @@
 
 /admin.html
   X-Robots-Tag: noindex, nofollow
+
+/published/menu.json
+  Cache-Control: no-store
+
+/published/images/*
+  Cache-Control: public, max-age=31536000, immutable

@@ -1,0 +1,13 @@
+.git
+.netlify
+.vercel
+.deploy
+dist
+published
+node_modules
+.env
+.env.*
+supabase
+tests
+qa-*.html
+*.log

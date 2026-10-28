@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F58A07">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Demonstração de cardápio digital para o Gastrô Pub — Restaurante e Bar.">
+  <title>Gastrô Pub | Cardápio</title>
+  <link rel="stylesheet" href="src/styles.css?v=20261028-gastro">
+  <script type="importmap">
+    {"imports":{"react":"https://esm.sh/react@19.2.0","react-dom/client":"https://esm.sh/react-dom@19.2.0/client?external=react"}}
+  </script>
+  <script src="clientes/gastro-pub/config.js?v=20261028-gastro"></script>
+  <!-- Apresentação independente: não lê nem modifica o Supabase. -->
+  <script>const NUVEM = { ativo: false };</script>
+</head>
+<body class="gastro-demo">
+  <div id="root"><p class="loading">Preparando seu cardápio…</p></div>
+  <footer class="demo-disclaimer">Apresentação demonstrativa. Fotos, descrições e preços ilustrativos.</footer>
+  <noscript>Ative o JavaScript para visualizar o cardápio.</noscript>
+  <script type="module" src="src/main.js?v=20261028-gastro"></script>
+</body>
+</html>

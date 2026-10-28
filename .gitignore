@@ -1,6 +1,8 @@
 # Artefatos gerados e estado local
 dist/
+published/
 .netlify/
+.vercel/
 .deploy/
 node_modules/
 .env
