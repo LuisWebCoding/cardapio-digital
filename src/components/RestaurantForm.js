@@ -1,5 +1,5 @@
 import { createElement as h, useState } from 'react';
-import { Field, ImageField } from './Fields.js?v=20261016-photos';
+import { Field, ImageField } from './Fields.js?v=20261028-gastro';
 
 export function RestaurantForm({ menu, onSave }) {
   const [form, setForm] = useState(() => ({ ...menu }));

@@ -1,7 +1,7 @@
 import { createElement as h, useId, useRef, useEffect, useState } from 'react';
-import { safeImage } from '../lib/menu.js?v=20261016-photos';
-import { cloudEnabled } from '../services/cloud.js?v=20261016-photos';
-import { uploadMenuPhoto } from '../services/photos.js?v=20261016-photos';
+import { safeImage } from '../lib/menu.js?v=20261028-gastro';
+import { cloudEnabled } from '../services/cloud.js?v=20261028-gastro';
+import { uploadMenuPhoto } from '../services/photos.js?v=20261028-gastro';
 
 export function Field({ label, hint, multiline = false, ...props }) {
   const id = useId();
@@ -71,16 +71,4 @@ export function ImageField({ label, value, onChange, onBusyChange = () => {}, up
   );
 }
 
-export function Modal({ title, children, onClose }) {
-  const dialog = useRef(null);
-  const titleId = useId();
-  useEffect(() => {
-    const previous = document.activeElement;
-    dialog.current.showModal();
-    return () => { previous?.focus(); };
-  }, []);
-  return h('dialog', { ref: dialog, className: 'modal', 'aria-labelledby': titleId, onCancel: onClose },
-    h('div', { className: 'modal-heading' }, h('h2', { id: titleId }, title),
-      h('button', { type: 'button', className: 'icon-button', 'aria-label': 'Fechar formulário', onClick: onClose }, '×')),
-    children);
-}
+export { Modal } from './Modal.js?v=20261028-gastro';

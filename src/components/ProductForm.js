@@ -1,12 +1,13 @@
 import { createElement as h, useState, useId } from 'react';
-import { Field, ImageField } from './Fields.js?v=20261016-photos';
-import { newId, formatPrice, priceToNumber, safeImage } from '../lib/menu.js?v=20261016-photos';
+import { Field, ImageField } from './Fields.js?v=20261028-gastro';
+import { newId, formatPrice, priceToNumber, safeImage } from '../lib/menu.js?v=20261028-gastro';
 
 export function ProductForm({ item, categories, categoryId, onSave, onCancel }) {
   const [form, setForm] = useState(() => ({
     id: item?.id || newId(), nome: item?.nome || '', descricao: item?.descricao || '',
     preco: item ? priceToNumber(item.preco).toFixed(2) : '', imagem: item?.imagem || '',
-    destaque: item?.destaque || '', categoryId: categoryId || categories[0]?.id || ''
+    destaque: item?.destaque || '', categoryId: categoryId || categories[0]?.id || '',
+    disponivel: item?.disponivel !== false, porcao: item?.porcao || '', restricoes: item?.restricoes || []
   }));
   const [error, setError] = useState('');
   const [uploading, setUploading] = useState(false);
@@ -22,7 +23,10 @@ export function ProductForm({ item, categories, categoryId, onSave, onCancel }) 
     onSave({
       id: form.id, nome: form.nome.trim(), descricao: form.descricao.trim(),
       preco: formatPrice(Number(form.preco)), imagem: form.imagem.trim(),
-      ...(form.destaque.trim() ? { destaque: form.destaque.trim() } : {})
+      ...(form.destaque.trim() ? { destaque: form.destaque.trim() } : {}),
+      ...(form.disponivel ? {} : { disponivel: false }),
+      ...(form.porcao.trim() ? { porcao: form.porcao.trim() } : {}),
+      ...(form.restricoes.length ? { restricoes: form.restricoes } : {})
     }, form.categoryId);
   }
   return h('form', { onSubmit: submit, className: 'form-stack' },
@@ -31,6 +35,22 @@ export function ProductForm({ item, categories, categoryId, onSave, onCancel }) 
       h('select', { id: selectId, required: true, value: form.categoryId, onChange: change('categoryId') },
         categories.map(c => h('option', { key: c.id, value: c.id }, c.nome)))),
     h(Field, { label: 'Descrição', multiline: true, rows: 3, maxLength: 500, value: form.descricao, onChange: change('descricao') }),
+    h('label', { className: 'checkbox-label' },
+      h('input', { type: 'checkbox', checked: form.disponivel,
+        onChange: event => setForm({ ...form, disponivel: event.target.checked }) }), 'Disponível para o cliente'),
+    h(Field, { label: 'Porção (opcional)', placeholder: 'Ex.: serve 2 pessoas ou copo de 400 ml', maxLength: 80,
+      value: form.porcao, onChange: change('porcao') }),
+    h('fieldset', { className: 'diet-options' },
+      h('legend', null, 'Informações alimentares (opcional)'),
+      h('p', { className: 'muted' }, 'Marque somente informações confirmadas pela cozinha.'),
+      h('div', { className: 'diet-grid' }, ['Vegetariano', 'Vegano', 'Sem glúten', 'Sem lactose',
+        'Contém leite', 'Contém ovos', 'Contém soja', 'Contém trigo', 'Contém amendoim', 'Contém castanhas'].map(label =>
+        h('label', { key: label, className: 'checkbox-label' },
+          h('input', { type: 'checkbox', checked: form.restricoes.includes(label), onChange: event => {
+            const checked = event.target.checked;
+            setForm(previous => ({ ...previous, restricoes: checked
+              ? [...previous.restricoes, label] : previous.restricoes.filter(value => value !== label) }));
+          } }), label)))),
     h('div', { className: 'form-grid' },
       h(Field, { label: 'Preço (R$)', type: 'number', min: 0, max: 999999.99, step: '.01', required: true, value: form.preco, onChange: change('preco') }),
       h(Field, { label: 'Destaque (opcional)', placeholder: 'Mais Pedido', maxLength: 40, value: form.destaque, onChange: change('destaque') })),

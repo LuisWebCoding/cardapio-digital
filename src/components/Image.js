@@ -1,5 +1,5 @@
 import { createElement as h, useState } from 'react';
-import { safeImage } from '../lib/menu.js?v=20261016-photos';
+import { safeImage } from '../lib/menu.js?v=20261028-gastro';
 
 export function Image({ src, alt = '', className = '', fallback = null, eager = false }) {
   const [failed, setFailed] = useState('');
