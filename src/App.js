@@ -1,8 +1,8 @@
 import { createElement as h } from 'react';
-import { Menu } from './components/Menu.js?v=20261016-photos';
-import { validateMenu } from './lib/menu.js?v=20261016-photos';
-import { useBrand } from './hooks/useBrand.js?v=20261016-photos';
-import { usePublishedMenu } from './hooks/usePublishedMenu.js?v=20261016-photos';
+import { Menu } from './components/Menu.js?v=20261028-gastro';
+import { validateMenu } from './lib/menu.js?v=20261028-gastro';
+import { useBrand } from './hooks/useBrand.js?v=20261028-gastro';
+import { usePublishedMenu } from './hooks/usePublishedMenu.js?v=20261028-gastro';
 
 const fallback = validateMenu(RESTAURANTE);
 

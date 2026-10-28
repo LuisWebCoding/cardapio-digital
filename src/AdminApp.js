@@ -1,11 +1,11 @@
 import { createElement as h, useEffect, useState } from 'react';
-import { Admin } from './components/Admin.js?v=20261016-qa2';
-import { Menu } from './components/Menu.js?v=20261016-photos';
-import { CloudManager } from './components/CloudManager.js?v=20261016-photos';
-import { cloudEnabled } from './services/cloud.js?v=20261016-photos';
-import { useMenu } from './hooks/useMenu.js?v=20261016-photos';
-import { useBrand } from './hooks/useBrand.js?v=20261016-photos';
-import { validateMenu } from './lib/menu.js?v=20261016-photos';
+import { Admin } from './components/Admin.js?v=20261028-gastro';
+import { Menu } from './components/Menu.js?v=20261028-gastro';
+import { CloudManager } from './components/CloudManager.js?v=20261028-gastro';
+import { cloudEnabled } from './services/cloud.js?v=20261028-gastro';
+import { useMenu } from './hooks/useMenu.js?v=20261028-gastro';
+import { useBrand } from './hooks/useBrand.js?v=20261028-gastro';
+import { validateMenu } from './lib/menu.js?v=20261028-gastro';
 
 const localPublished = validateMenu(RESTAURANTE);
 const isPreview = () => location.hash === '#preview' || location.hash.startsWith('#preview/');
@@ -22,7 +22,10 @@ function Editor({ published, namespace = '', publication = null }) {
   const style = useBrand(state.menu, preview ? 'Prévia do gestor' : 'Painel do restaurante');
   return h('div', { style }, preview
     ? h(Menu, { restaurant: state.menu, preview: true })
-    : h(Admin, { ...state, published, publication }));
+    : h(Admin, { ...state, published, publication, commit: next => {
+      publication?.onDraftChange?.();
+      return state.commit(next);
+    } }));
 }
 
 export function AdminApp() {
